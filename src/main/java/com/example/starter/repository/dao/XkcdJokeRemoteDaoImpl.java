@@ -39,6 +39,9 @@ public class XkcdJokeRemoteDaoImpl implements XkcdJokeRemoteDao {
       }).onErrorResumeNext(Single::error);
   }
 
+  // Not using toMap because the Date attribute from the api XkcdJoke is not
+  // the same type as the json date attribute (String vs LocalDateTime)
+  // Besides some attribute names are different from the json fields
   private XkcdJoke adapt(JsonObject json) {
     XkcdJoke xkcdJoke = new XkcdJoke(String.valueOf(json.getInteger("num")));
     String day = json.getString("day");

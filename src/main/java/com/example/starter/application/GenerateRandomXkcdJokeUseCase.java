@@ -26,8 +26,8 @@ public class GenerateRandomXkcdJokeUseCase {
     return joke.map(this::adapt);
   }
 
-  // Not using toMap because the name of some XkcdJoke attributes names are not the same
-  // as the fields of the json received from the xkcd service
+  // Not using toMap because the Date attribute from the api XkcdJoke is not
+  // the same type as the domain XkcdJoke Date attribute (String vs LocalDateTime)
   private XkcdJoke adapt(com.example.starter.domain.XkcdJoke domain) {
     XkcdJoke api = new XkcdJoke();
     api.setId(domain.getId());
