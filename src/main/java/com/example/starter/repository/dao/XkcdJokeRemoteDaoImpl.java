@@ -34,6 +34,7 @@ public class XkcdJokeRemoteDaoImpl implements XkcdJokeRemoteDao {
       .putHeader("Accept", "*")
       .rxSend().retry(3).flatMap(response -> {
         LOGGER.info("Received response with status code : " + response.statusCode() + " Joke Id: " + id);
+        LOGGER.info("Received response: " + response.bodyAsString());
         return Single.just(adapt(response.bodyAsJsonObject()));
       }).onErrorResumeNext(Single::error);
   }

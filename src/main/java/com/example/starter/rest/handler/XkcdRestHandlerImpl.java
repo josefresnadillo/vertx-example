@@ -1,6 +1,6 @@
 package com.example.starter.rest.handler;
 
-import com.example.starter.application.FetchRandomXkcdJoke;
+import com.example.starter.application.GenerateRandomXkcdJokeUseCase;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -10,12 +10,12 @@ import javax.inject.Inject;
 
 public class XkcdRestHandlerImpl {
 
-  private final FetchRandomXkcdJoke service;
+  private final GenerateRandomXkcdJokeUseCase service;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XkcdRestHandlerImpl.class.getName());
 
   @Inject
-  public XkcdRestHandlerImpl(FetchRandomXkcdJoke service) {
+  public XkcdRestHandlerImpl(GenerateRandomXkcdJokeUseCase service) {
     this.service = service;
   }
 

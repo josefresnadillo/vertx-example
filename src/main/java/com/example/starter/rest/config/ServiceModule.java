@@ -1,6 +1,6 @@
 package com.example.starter.rest.config;
 
-import com.example.starter.application.FetchRandomXkcdJoke;
+import com.example.starter.application.GenerateRandomXkcdJokeUseCase;
 import com.example.starter.domain.SendJokeByEmail;
 import com.example.starter.infrastructure.smtp.SendJokeByEmailImpl;
 import com.example.starter.infrastructure.smtp.service.EmailService;
@@ -29,8 +29,8 @@ public class ServiceModule {
 
   @Provides
   @Singleton
-  public FetchRandomXkcdJoke fetchJoke(XkcdJokeRepository repository, SendJokeByEmail sendJokeByEmail) {
-    return new FetchRandomXkcdJoke(repository, sendJokeByEmail);
+  public GenerateRandomXkcdJokeUseCase fetchJoke(XkcdJokeRepository repository, SendJokeByEmail sendJokeByEmail) {
+    return new GenerateRandomXkcdJokeUseCase(repository, sendJokeByEmail);
   }
 
   @Provides

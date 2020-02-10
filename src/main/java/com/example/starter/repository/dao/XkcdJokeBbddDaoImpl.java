@@ -15,6 +15,6 @@ public class XkcdJokeBbddDaoImpl implements XkcdJokeBbddDao {
   }
 
   public void save(String joke, Handler<AsyncResult<String>> resultHandler){
-    resultHandler.handle(Future.succeededFuture("result"));
+    resultHandler.handle(Future.succeededFuture("ok"));
   }
 }

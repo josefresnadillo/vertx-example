@@ -7,12 +7,12 @@ import io.reactivex.Single;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-public class FetchRandomXkcdJoke {
+public class GenerateRandomXkcdJokeUseCase {
 
   private XkcdJokeRepository xkcdJokeRepository;
   private SendJokeByEmail sendJokeByEmail;
 
-  public FetchRandomXkcdJoke(XkcdJokeRepository repository, SendJokeByEmail sendJokeByEmail) {
+  public GenerateRandomXkcdJokeUseCase(XkcdJokeRepository repository, SendJokeByEmail sendJokeByEmail) {
     this.xkcdJokeRepository = repository;
     this.sendJokeByEmail = sendJokeByEmail;
   }
@@ -26,14 +26,14 @@ public class FetchRandomXkcdJoke {
     return joke.map(this::adapt);
   }
 
+  // Not using toMap because the name of some XkcdJoke attributes names are not the same
+  // as the fields of the json received from the xkcd service
   private XkcdJoke adapt(com.example.starter.domain.XkcdJoke domain) {
     XkcdJoke api = new XkcdJoke();
     api.setId(domain.getId());
     api.setAlt(domain.getAlt());
-
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     api.setDate(domain.getDate().format(formatter));
-
     api.setLink(domain.getLink());
     api.setNews(domain.getNews());
     api.setTitle(domain.getTitle());

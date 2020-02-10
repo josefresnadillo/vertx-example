@@ -1,5 +1,7 @@
 package com.example.starter.infrastructure.smtp.service;
 
+import com.example.starter.domain.XkcdJoke;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -12,15 +14,29 @@ import javax.inject.Inject;
 public class EmailServiceImpl implements EmailService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class.getName());
+  private final ObjectMapper objectMapper;
 
-  public EmailServiceImpl(){ }
+  public EmailServiceImpl(){
+    this.objectMapper = new ObjectMapper();
+  }
 
   @Inject
-  public EmailServiceImpl(Vertx vertx) {}
+  public EmailServiceImpl(Vertx vertx) {
+    this.objectMapper = new ObjectMapper();
+  }
 
   @Override
   public void send(String joke, String to, Handler<AsyncResult<String>> resultHandler){
-    LOGGER.info("Send joke: " + joke);
-    resultHandler.handle(Future.succeededFuture("result"));
+    XkcdJoke xkcdJoke = toJoke(joke);
+    LOGGER.info("Send joke: " + xkcdJoke.getId());
+    resultHandler.handle(Future.succeededFuture(xkcdJoke.getId()));
+  }
+
+  private XkcdJoke toJoke(String strJoke){
+    try {
+      return objectMapper.readValue(strJoke, XkcdJoke.class);
+    } catch(Exception e){
+      return new XkcdJoke("id");
+    }
   }
 }
