@@ -14,7 +14,7 @@ public class MainVerticle extends AbstractVerticle {
   private static final Logger LOGGER = LoggerFactory.getLogger(MainVerticle.class.getName());
 
   @Override
-  public void start(Future<Void> fut) {
+  public void start() {
 
     var handlerComponents = DaggerHandlerComponents.create();
 
