@@ -8,6 +8,8 @@ import io.vertx.core.Vertx;
 @ProxyGen
 public interface EmailService {
 
+  String SERVICE_ADDRESS = "email-service-address";
+
   // A couple of factory methods to create an instance and a proxy
   static EmailService create(Vertx vertx) {
     return new EmailServiceImpl(vertx);

@@ -26,7 +26,7 @@ public class XkcdJokeRepositoryImpl implements XkcdJokeRepository {
 
   public void save(XkcdJoke joke) {
     LOGGER.info("Save Joke: " + joke.getId());
-    bbddDao.save(joke.toString(),
+    bbddDao.save(joke.getTranscript(),
       res2 -> {
         if (res2.succeeded()) {
           LOGGER.info("Save Joke " + joke.getId() + " Success!!!!");

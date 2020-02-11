@@ -7,6 +7,7 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import com.example.starter.rest.config.DaggerHandlerComponents;
+import io.vertx.reactivex.ext.web.handler.StaticHandler;
 
 public class MainVerticle extends AbstractVerticle {
 
@@ -20,6 +21,8 @@ public class MainVerticle extends AbstractVerticle {
     XkcdRestHandlerImpl handler = handlerComponents.buildXkcdRestHandler();
     Router router = Router.router(vertx);
     router.route("/xkcd").handler(handler::getContent);
+
+    router.route("/*").handler(StaticHandler.create());
 
     String host = config().getJsonObject("server").getString("host");
     Integer port = config().getJsonObject("server").getInteger("port");

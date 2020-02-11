@@ -10,6 +10,8 @@ import io.vertx.core.Vertx;
 @ProxyGen
 public interface XkcdJokeBbddDao {
 
+  String SERVICE_ADDRESS = "database-service-address";
+
   // A couple of factory methods to create an instance and a proxy
   static XkcdJokeBbddDao create(Vertx vertx) {
     return new XkcdJokeBbddDaoImpl(vertx);

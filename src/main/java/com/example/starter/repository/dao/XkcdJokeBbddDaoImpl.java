@@ -11,6 +11,7 @@ import javax.inject.Inject;
 public class XkcdJokeBbddDaoImpl implements XkcdJokeBbddDao {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XkcdJokeBbddDaoImpl.class.getName());
+  private static final int MAXJOKELOG= 100;
 
   public XkcdJokeBbddDaoImpl(){}
 
@@ -20,7 +21,16 @@ public class XkcdJokeBbddDaoImpl implements XkcdJokeBbddDao {
 
   public void save(String joke, Handler<AsyncResult<String>> resultHandler){
     // TODO
-    LOGGER.info("Save joke: " + joke);
+    LOGGER.info("Saving joke: " + safeSubString(joke) + ": Thread: " + Thread.currentThread().getId() );
     resultHandler.handle(Future.succeededFuture("ok"));
+  }
+
+  private String safeSubString(String joke){
+    String result = joke;
+    result.replace("\\n", " ");
+    if (joke.length() > MAXJOKELOG){
+      result = result.substring(0, MAXJOKELOG) + "...";
+    }
+    return result;
   }
 }

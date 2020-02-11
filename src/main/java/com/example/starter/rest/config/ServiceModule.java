@@ -4,34 +4,41 @@ import com.example.starter.application.GenerateRandomXkcdJokeUseCase;
 import com.example.starter.domain.SendJokeByEmail;
 import com.example.starter.infrastructure.smtp.SendJokeByEmailImpl;
 import com.example.starter.infrastructure.smtp.service.EmailService;
-import com.example.starter.infrastructure.smtp.service.EmailServiceImpl;
 import com.example.starter.repository.dao.XkcdJokeBbddDao;
-import com.example.starter.repository.dao.XkcdJokeBbddDaoImpl;
 import com.example.starter.repository.dao.XkcdJokeRemoteDao;
 import com.example.starter.domain.XkcdJokeRepository;
 import com.example.starter.repository.dao.XkcdJokeRemoteDaoImpl;
 import com.example.starter.repository.XkcdJokeRepositoryImpl;
+import com.example.starter.rest.service.XkcdRestService;
+import com.example.starter.rest.service.XkcdRestServiceImpl;
 import dagger.Provides;
 import dagger.Module;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.client.WebClient;
-import io.vertx.serviceproxy.ServiceBinder;
+import io.vertx.serviceproxy.ServiceProxyBuilder;
 import javax.inject.Singleton;
 
 @Module
 public class ServiceModule {
 
+  // Rest layer
+
   @Provides
   @Singleton
-  public WebClient provideWebClient() {
-    return WebClient.create(Vertx.currentContext().owner());
+  public XkcdRestService restService(GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase) {
+    return new XkcdRestServiceImpl(generateRandomXkcdJokeUseCase);
   }
+
+  // Application layer
 
   @Provides
   @Singleton
   public GenerateRandomXkcdJokeUseCase fetchJoke(XkcdJokeRepository repository, SendJokeByEmail sendJokeByEmail) {
     return new GenerateRandomXkcdJokeUseCase(repository, sendJokeByEmail);
   }
+
+
+  // Domain layer
 
   @Provides
   @Singleton
@@ -45,29 +52,32 @@ public class ServiceModule {
     return new XkcdJokeRepositoryImpl(xkcdBBDDDao, xkcdRemoteDao);
   }
 
+  // Repository layer
+
   @Provides
   @Singleton
-  public XkcdJokeRemoteDao xkcdJokeRemoteDao(WebClient webClient) {
+  public XkcdJokeRemoteDao xkcdJokeRemoteDao() {
     String url = Vertx.currentContext().config().getJsonObject("thirdParties").getJsonObject("xkcdJoke").getString("url");
     Integer retries = Vertx.currentContext().config().getJsonObject("thirdParties").getJsonObject("xkcdJoke").getInteger("retries");
-    return new XkcdJokeRemoteDaoImpl(webClient, url, retries);
+    return new XkcdJokeRemoteDaoImpl(WebClient.create(Vertx.currentContext().owner()), url, retries);
   }
 
   // A new verticle to access the ddbb
   @Provides
   @Singleton
   public XkcdJokeBbddDao xkcdJokeBbddDao(){
-    XkcdJokeBbddDao dao = new XkcdJokeBbddDaoImpl();
-    new ServiceBinder(Vertx.currentContext().owner().getDelegate()).setAddress("database-service-address").register(XkcdJokeBbddDao.class, dao);
-    return XkcdJokeBbddDao.createProxy(Vertx.currentContext().owner().getDelegate(), "database-service-address");
+    ServiceProxyBuilder builder = new ServiceProxyBuilder(Vertx.currentContext().owner().getDelegate()).setAddress(XkcdJokeBbddDao.SERVICE_ADDRESS);
+    return builder.build(XkcdJokeBbddDao.class);
   }
+
+  // Email infrastructure layer
 
   // A new verticle to send the email
   @Provides
   @Singleton
   public EmailService emailService(){
-    EmailService emailService = new EmailServiceImpl();
-    new ServiceBinder(Vertx.currentContext().owner().getDelegate()).setAddress("email-service-address").register(EmailService.class, emailService);
-    return EmailService.createProxy(Vertx.currentContext().owner().getDelegate(), "email-service-address");
+    ServiceProxyBuilder builder = new ServiceProxyBuilder(Vertx.currentContext().owner().getDelegate()).setAddress(EmailService.SERVICE_ADDRESS);
+    return builder.build(EmailService.class);
   }
+
 }

@@ -11,6 +11,7 @@ public class GenerateRandomXkcdJokeUseCase {
 
   private XkcdJokeRepository xkcdJokeRepository;
   private SendJokeByEmail sendJokeByEmail;
+  private Random rand = new Random();
 
   public GenerateRandomXkcdJokeUseCase(XkcdJokeRepository repository, SendJokeByEmail sendJokeByEmail) {
     this.xkcdJokeRepository = repository;
@@ -18,7 +19,6 @@ public class GenerateRandomXkcdJokeUseCase {
   }
 
   public Single<XkcdJoke> fetchRandomJoke(String email) {
-    Random rand = new Random();
     int jokeId = rand.nextInt(1000);
     Single<com.example.starter.domain.XkcdJoke> joke = xkcdJokeRepository.retrieve(String.valueOf(jokeId));
     joke.subscribe(j -> xkcdJokeRepository.save(j));
