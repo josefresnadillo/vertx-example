@@ -26,7 +26,7 @@ public class MainVerticle extends AbstractVerticle {
 
     LOGGER.info("Host: " + host + " port: " + port);
 
-    vertx.createHttpServer().requestHandler(router).rxListen(8080, "0.0.0.0")
+    vertx.createHttpServer().requestHandler(router).rxListen(port, host)
       .doOnError(failure -> {
         LOGGER.info("Error trying to start server: " + failure.getMessage());
         System.exit(1);
