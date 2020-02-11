@@ -1,5 +1,6 @@
 package com.example.starter.infrastructure.smtp.service;
 
+import com.example.starter.domain.XkcdDomainException;
 import com.example.starter.domain.XkcdJoke;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.AsyncResult;
@@ -9,6 +10,8 @@ import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import javax.inject.Inject;
+
+// A new verticle to send the email
 
 public class EmailServiceImpl implements EmailService {
 
@@ -36,7 +39,8 @@ public class EmailServiceImpl implements EmailService {
     try {
       return objectMapper.readValue(strJoke, XkcdJoke.class);
     } catch(Exception e){
-      return new XkcdJoke("id"); // TODO error control
+      LOGGER.debug("Error parsing xkcdJoke! " + e.getMessage());
+      throw new XkcdDomainException("Impossible to parse xkcd joke!", e);
     }
   }
 }

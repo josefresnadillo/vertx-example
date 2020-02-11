@@ -17,12 +17,12 @@ public class GenerateRandomXkcdJokeUseCase {
     this.sendJokeByEmail = sendJokeByEmail;
   }
 
-  public Single<XkcdJoke> fetchRandomJoke() {
+  public Single<XkcdJoke> fetchRandomJoke(String email) {
     Random rand = new Random();
     int jokeId = rand.nextInt(1000);
     Single<com.example.starter.domain.XkcdJoke> joke = xkcdJokeRepository.retrieve(String.valueOf(jokeId));
     joke.subscribe(j -> xkcdJokeRepository.save(j));
-    joke.subscribe(j -> sendJokeByEmail.send(j, "jose.fresna@masmovil.es"));
+    joke.subscribe(j -> sendJokeByEmail.send(j, email));
     return joke.map(this::adapt);
   }
 

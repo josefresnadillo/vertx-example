@@ -5,6 +5,8 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 
+// A new verticle to access the ddbb
+
 @ProxyGen
 public interface XkcdJokeBbddDao {
 

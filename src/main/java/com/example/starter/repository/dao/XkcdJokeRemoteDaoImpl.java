@@ -19,10 +19,12 @@ public class XkcdJokeRemoteDaoImpl implements XkcdJokeRemoteDao {
   @Getter
   @Setter
   private String xkcdJokeUrl;
+  private Integer retries;
   private final WebClient webClient;
 
-  public XkcdJokeRemoteDaoImpl(WebClient webClient, String url) {
+  public XkcdJokeRemoteDaoImpl(WebClient webClient, String url, Integer retries) {
     this.xkcdJokeUrl = url;
+    this.retries = retries;
     this.webClient = webClient;
   }
 
@@ -32,7 +34,7 @@ public class XkcdJokeRemoteDaoImpl implements XkcdJokeRemoteDao {
     LOGGER.info("Xkdc joke final url: " + url);
     return webClient.getAbs(url)
       .putHeader("Accept", "*")
-      .rxSend().retry(3).flatMap(response -> {
+      .rxSend().retry(retries).flatMap(response -> {
         LOGGER.info("Received response with status code : " + response.statusCode() + " Joke Id: " + id);
         LOGGER.info("Received response: " + response.bodyAsString());
         return Single.just(adapt(response.bodyAsJsonObject()));

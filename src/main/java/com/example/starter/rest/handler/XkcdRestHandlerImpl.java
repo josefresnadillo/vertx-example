@@ -1,6 +1,7 @@
 package com.example.starter.rest.handler;
 
 import com.example.starter.application.GenerateRandomXkcdJokeUseCase;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -20,8 +21,8 @@ public class XkcdRestHandlerImpl {
   }
 
   public void getContent(RoutingContext context) {
-    LOGGER.info("Route: " + context.normalisedPath());
-    service.fetchRandomJoke().subscribe(response -> {
+    String email = Vertx.currentContext().config().getJsonObject("thirdParties").getJsonObject("xkcdJoke").getString("email");
+    service.fetchRandomJoke(email).subscribe(response -> {
       LOGGER.info("XkcdRestHandlerImpl OK");
       context.response()
         .putHeader("content-type", "application/json; charset=utf-8")

@@ -1,6 +1,7 @@
 package com.example.starter.infrastructure.smtp;
 
 import com.example.starter.domain.SendJokeByEmail;
+import com.example.starter.domain.XkcdDomainException;
 import com.example.starter.domain.XkcdJoke;
 import com.example.starter.infrastructure.smtp.service.EmailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,13 +33,12 @@ public class SendJokeByEmailImpl implements SendJokeByEmail {
       });
   }
 
-  // io.vertx.core.json.Json is not able to code and decode a LocalDateTime properly
   private String toJson(XkcdJoke xkcdJoke){
     try {
       return objectMapper.writeValueAsString(xkcdJoke);
     } catch (Exception e){
       LOGGER.info("Could not parse xkcd joke!!!");
-      return "";
+      throw new XkcdDomainException("Impossible to parse xkcd joke!", e);
     }
   }
 }

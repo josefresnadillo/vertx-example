@@ -49,9 +49,11 @@ public class ServiceModule {
   @Singleton
   public XkcdJokeRemoteDao xkcdJokeRemoteDao(WebClient webClient) {
     String url = Vertx.currentContext().config().getJsonObject("thirdParties").getJsonObject("xkcdJoke").getString("url");
-    return new XkcdJokeRemoteDaoImpl(webClient, url);
+    Integer retries = Vertx.currentContext().config().getJsonObject("thirdParties").getJsonObject("xkcdJoke").getInteger("retries");
+    return new XkcdJokeRemoteDaoImpl(webClient, url, retries);
   }
 
+  // A new verticle to access the ddbb
   @Provides
   @Singleton
   public XkcdJokeBbddDao xkcdJokeBbddDao(){
@@ -60,6 +62,7 @@ public class ServiceModule {
     return XkcdJokeBbddDao.createProxy(Vertx.currentContext().owner().getDelegate(), "database-service-address");
   }
 
+  // A new verticle to send the email
   @Provides
   @Singleton
   public EmailService emailService(){

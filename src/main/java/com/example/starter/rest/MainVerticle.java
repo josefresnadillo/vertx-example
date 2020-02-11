@@ -21,13 +21,18 @@ public class MainVerticle extends AbstractVerticle {
     Router router = Router.router(vertx);
     router.route("/xkcd").handler(handler::getContent);
 
+    String host = config().getJsonObject("server").getString("host");
+    Integer port = config().getJsonObject("server").getInteger("port");
+
+    LOGGER.info("Host: " + host + " port: " + port);
+
     vertx.createHttpServer().requestHandler(router).rxListen(8080, "0.0.0.0")
       .doOnError(failure -> {
         LOGGER.info("Error trying to start server: " + failure.getMessage());
         System.exit(1);
       })
       .subscribe(httpServer -> {
-        LOGGER.info("HTTP server started on http://0.0.0.0:8080");
+        LOGGER.info("HTTP server started on http://" + host + ":" + port);
       });
   }
 }
