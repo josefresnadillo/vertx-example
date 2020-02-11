@@ -8,7 +8,6 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-
 import javax.inject.Inject;
 
 public class EmailServiceImpl implements EmailService {
@@ -27,6 +26,7 @@ public class EmailServiceImpl implements EmailService {
 
   @Override
   public void send(String joke, String to, Handler<AsyncResult<String>> resultHandler){
+    //TODO
     XkcdJoke xkcdJoke = toJoke(joke);
     LOGGER.info("Send joke: " + xkcdJoke.getId());
     resultHandler.handle(Future.succeededFuture(xkcdJoke.getId()));
@@ -36,7 +36,7 @@ public class EmailServiceImpl implements EmailService {
     try {
       return objectMapper.readValue(strJoke, XkcdJoke.class);
     } catch(Exception e){
-      return new XkcdJoke("id");
+      return new XkcdJoke("id"); // TODO error control
     }
   }
 }
