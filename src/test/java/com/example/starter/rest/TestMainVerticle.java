@@ -1,4 +1,4 @@
-package com.example.starter;
+package com.example.starter.rest;
 
 import com.example.starter.rest.MainVerticle;
 import io.vertx.core.Vertx;
