@@ -1,10 +1,13 @@
 package com.example.starter.rest;
 
 import com.example.starter.rest.handler.XkcdRestHandlerImpl;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Future;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.reactivex.core.http.HttpServerResponse;
+import io.vertx.reactivex.ext.web.Route;
 import io.vertx.reactivex.ext.web.Router;
 import com.example.starter.rest.config.DaggerHandlerComponents;
 import io.vertx.reactivex.ext.web.handler.StaticHandler;
@@ -23,6 +26,15 @@ public class MainVerticle extends AbstractVerticle {
     router.route("/xkcd").handler(handler::getContent);
 
     router.route("/*").handler(StaticHandler.create());
+
+    router.route("/health").handler(routingContext -> {
+      HttpServerResponse response = routingContext.response();
+      LOGGER.info("Health!!!");
+      response
+              .putHeader("content-type", "text/html")
+              .setStatusCode(HttpResponseStatus.OK.code())
+              .end("<h1>Health OK</h1>");
+    });
 
     String host = config().getJsonObject("server").getString("host");
     Integer port = config().getJsonObject("server").getInteger("port");

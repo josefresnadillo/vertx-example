@@ -11,38 +11,43 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.Vertx;
+
 import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Main.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class.getName());
 
-  public static void main(String[] args) {
-    Vertx vertx = Vertx.vertx();
+    public static void main(String[] args) {
+        Vertx vertx = Vertx.vertx();
 
-    ConfigStoreOptions store = new ConfigStoreOptions()
-      .setType("file")
-      .setFormat("yaml")
-      .setConfig(new JsonObject().put("path", "config.yaml")
-      );
+        ConfigStoreOptions store = new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", "vxcnf/config.yaml"));
 
-    LOGGER.info("Reading configuration...");
-    ConfigRetriever retriever = ConfigRetriever.create(vertx, new ConfigRetrieverOptions().addStore(store));
-    retriever.getConfig(ar -> {
-      LOGGER.info("Reading configuration... done!");
+        final String vertxConfigPath = System.getenv("VERTX_CONFIG_PATH");
+        if (vertxConfigPath != null) {
+            LOGGER.info("Reading configuration from " + vertxConfigPath + "-");
+            store.setConfig(new JsonObject().put("path", vertxConfigPath));
+        }
 
-      DeploymentOptions deploymentOptions = new DeploymentOptions().setConfig(ar.result()).setInstances(3);
-      vertx.deployVerticle(MainVerticle.class.getName(), deploymentOptions);
+        LOGGER.info("Reading configuration...");
+        ConfigRetriever retriever = ConfigRetriever.create(vertx, new ConfigRetrieverOptions().addStore(store));
+        retriever.getConfig(ar -> {
 
-      DeploymentOptions workerDeploymentOptions = new DeploymentOptions().setWorker(true)
-              .setInstances(3) // matches the worker pool size below
-              .setWorkerPoolName("helloWorld-worker-pool")
-              .setWorkerPoolSize(3)
-              .setMaxWorkerExecuteTime(10)
-              .setMaxWorkerExecuteTimeUnit(TimeUnit.SECONDS).setConfig(ar.result());
+            LOGGER.info("Reading configuration... done!");
 
-      vertx.deployVerticle(BlockingXkcdBbddVerticle.class.getName(), workerDeploymentOptions);
-      vertx.deployVerticle(BlockingXkcdSendEmailVerticle.class.getName(), workerDeploymentOptions);
-    });
-  }
+            DeploymentOptions deploymentOptions = new DeploymentOptions().setConfig(ar.result()).setInstances(3);
+            vertx.deployVerticle(MainVerticle.class.getName(), deploymentOptions);
+
+            DeploymentOptions workerDeploymentOptions = new DeploymentOptions().setWorker(true)
+                    .setInstances(3) // matches the worker pool size below
+                    .setWorkerPoolName("helloWorld-worker-pool")
+                    .setWorkerPoolSize(3)
+                    .setMaxWorkerExecuteTime(10)
+                    .setMaxWorkerExecuteTimeUnit(TimeUnit.SECONDS).setConfig(ar.result());
+
+            vertx.deployVerticle(BlockingXkcdBbddVerticle.class.getName(), workerDeploymentOptions);
+            vertx.deployVerticle(BlockingXkcdSendEmailVerticle.class.getName(), workerDeploymentOptions);
+
+        });
+    }
 }
