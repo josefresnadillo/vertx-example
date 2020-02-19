@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  labels:
+    app: vertx-ddd-template
+data:
+  config.yaml: |-
+    server:
+      host: 0.0.0.0
+      port: 8080
+      context: myservice-api
+    thirdParties:
+      xkcdJoke:
+        url: "https://xkcd.com/id/info.0.json"
+        retries: 3
+        email: "jose.fresna@masmovil.com"

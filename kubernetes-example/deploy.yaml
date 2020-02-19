@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vertx-ddd-template
+  labels:
+    app: vertx-ddd-template
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vertx-ddd-template
+  template:
+    metadata:
+      labels:
+        app: vertx-ddd-template
+    spec:
+      containers:
+      - name: vertx-ddd-template
+        image: localhost:5000/vertx-ddd-template:11.0.0
+        env:
+        - name: VERTX_CONFIG_PATH
+          value: /etc/config/config.yaml
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config/
+        - name: config-volume-secret
+          mountPath: /etc/config/secret
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: app-config
+      - name: config-volume-secret
+        secret:
+          secretName: mysecret
