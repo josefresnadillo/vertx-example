@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "vertx-ddd-template.fullname" . }}-test-connection"
+  labels:
+    {{- include "vertx-ddd-template.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "vertx-ddd-template.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

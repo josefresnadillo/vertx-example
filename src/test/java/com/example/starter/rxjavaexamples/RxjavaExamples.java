@@ -1,8 +1,15 @@
 package com.example.starter.rxjavaexamples;
 
+import static org.junit.Assert.assertTrue;
+
 import io.reactivex.*;
 import io.reactivex.schedulers.Schedulers;
 import org.junit.Test;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class RxjavaExamples {
 
@@ -69,5 +76,25 @@ public class RxjavaExamples {
             e.printStackTrace();
             return v + 10;
         }
+    }
+
+    @Test
+    public void testParseLocalDateTime(){
+        String s = "2011-12-03T00:00:00+00:00";
+        OffsetDateTime.parse(s, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+    }
+
+    @Test
+    public void testStringFormatPad1(){
+        int zipcode = 1;
+        String code = String.format("%05d", zipcode);
+        assertTrue(code.equals("00001"));
+    }
+
+    @Test
+    public void testStringFormatPad2(){
+        int zipcode = 1234;
+        String code = String.format("%05d", zipcode);
+        assertTrue(code.equals("01234"));
     }
 }
