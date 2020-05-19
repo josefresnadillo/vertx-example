@@ -28,6 +28,6 @@ public class XkcdRestHandlerImpl {
         .putHeader("content-type", "application/json; charset=utf-8")
         .setStatusCode(200)
         .end(Json.encodePrettily(response));
-    }, context::fail);
+    }, context::fail).dispose();
   }
 }

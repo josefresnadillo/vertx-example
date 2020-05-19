@@ -9,9 +9,9 @@ import java.util.Random;
 
 public class GenerateRandomXkcdJokeUseCase {
 
-  private XkcdJokeRepository xkcdJokeRepository;
-  private SendJokeByEmail sendJokeByEmail;
-  private Random rand = new Random();
+  private final XkcdJokeRepository xkcdJokeRepository;
+  private final SendJokeByEmail sendJokeByEmail;
+  private final Random rand = new Random();
 
   public GenerateRandomXkcdJokeUseCase(XkcdJokeRepository repository, SendJokeByEmail sendJokeByEmail) {
     this.xkcdJokeRepository = repository;
@@ -21,8 +21,8 @@ public class GenerateRandomXkcdJokeUseCase {
   public Single<XkcdJoke> fetchRandomJoke(String email) {
     int jokeId = rand.nextInt(1000);
     Single<com.example.starter.domain.XkcdJoke> joke = xkcdJokeRepository.retrieve(String.valueOf(jokeId));
-    joke.subscribe(j -> xkcdJokeRepository.save(j));
-    joke.subscribe(j -> sendJokeByEmail.send(j, email));
+    joke.subscribe(xkcdJokeRepository::save).dispose();
+    joke.subscribe(j -> sendJokeByEmail.send(j, email)).dispose();
     return joke.map(this::adapt);
   }
 

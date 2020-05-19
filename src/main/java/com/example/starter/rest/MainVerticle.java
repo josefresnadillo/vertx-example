@@ -1,13 +1,11 @@
 package com.example.starter.rest;
 
+import com.example.starter.rest.config.HandlerComponents;
 import com.example.starter.rest.handler.XkcdRestHandlerImpl;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.vertx.core.Future;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.core.http.HttpServerResponse;
-import io.vertx.reactivex.ext.web.Route;
 import io.vertx.reactivex.ext.web.Router;
 import com.example.starter.rest.config.DaggerHandlerComponents;
 import io.vertx.reactivex.ext.web.handler.StaticHandler;
@@ -19,7 +17,7 @@ public class MainVerticle extends AbstractVerticle {
   @Override
   public void start() {
 
-    var handlerComponents = DaggerHandlerComponents.create();
+    HandlerComponents handlerComponents = DaggerHandlerComponents.create();
 
     XkcdRestHandlerImpl handler = handlerComponents.buildXkcdRestHandler();
     Router router = Router.router(vertx);
@@ -32,7 +30,7 @@ public class MainVerticle extends AbstractVerticle {
       LOGGER.info("Health!!!");
       response
               .putHeader("content-type", "text/html")
-              .setStatusCode(HttpResponseStatus.OK.code())
+              .setStatusCode(200)
               .end("<h1>Health OK</h1>");
     });
 
@@ -48,6 +46,6 @@ public class MainVerticle extends AbstractVerticle {
       })
       .subscribe(httpServer -> {
         LOGGER.info("HTTP server started on http://" + host + ":" + port);
-      });
+      }).dispose();
   }
 }

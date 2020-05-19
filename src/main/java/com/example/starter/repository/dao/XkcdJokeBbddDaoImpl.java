@@ -27,7 +27,7 @@ public class XkcdJokeBbddDaoImpl implements XkcdJokeBbddDao {
 
   private String safeSubString(String joke){
     String result = joke;
-    result.replace("\\n", " ");
+    result = result.replace("\\n", " ");
     if (joke.length() > MAXJOKELOG){
       result = result.substring(0, MAXJOKELOG) + "...";
     }
