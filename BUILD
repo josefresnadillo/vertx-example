@@ -1,6 +1,7 @@
 load("@rules_java//java:defs.bzl", "java_binary")
 load("@rules_java//java:defs.bzl", "java_library")
 load("@rules_java//java:defs.bzl", "java_plugin")
+load("@rules_java//java:defs.bzl", "java_test")
 
 java_plugin(
     name = "dagger_plugin",
@@ -54,7 +55,7 @@ java_plugin(
 )
 
 java_binary(
-    name = "VertxTemplate",
+    name = "compile",
     srcs = glob(["src/main/java/**/*.java"]),
     resources = glob(["src/main/resources/**/*"]),
     main_class = "com.example.starter.Main",
@@ -94,4 +95,14 @@ java_binary(
             "@maven//:io_reactivex_rxjava",
             ],
     plugins = [":lombok_plugin", ":dagger_plugin", ":vertx_plugin", ":vertx_proxy_plugin",],
+)
+
+
+java_test(
+    name = "AllTests",
+    srcs = glob(['src/test/java/**/*.java']),
+    size = "small",
+    runtime_deps = [
+        ":compile"
+    ],
 )
