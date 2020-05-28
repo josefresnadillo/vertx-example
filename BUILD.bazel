@@ -54,11 +54,10 @@ java_plugin(
     generates_api = 1
 )
 
-java_binary(
+java_library(
     name = "compile",
     srcs = glob(["src/main/java/**/*.java"]),
     resources = glob(["src/main/resources/**/*"]),
-    main_class = "com.example.starter.Main",
     deps = ["@maven//:org_apache_commons_commons_lang3",
             "@maven//:io_vertx_vertx_web_client",
             "@maven//:io_vertx_vertx_config_yaml",
@@ -71,8 +70,12 @@ java_binary(
             "@maven//:io_vertx_vertx_codegen",
             "@maven//:io_vertx_vertx_unit",
             "@maven//:io_vertx_vertx_config_kubernetes_configmap",
+
             "@maven//:org_junit_jupiter_junit_jupiter_api",
             "@maven//:org_junit_jupiter_junit_jupiter_engine",
+            "@maven//:org_junit_platform_junit_platform_console",
+            "@maven//:org_mockito_mockito_junit_jupiter",
+
             "@maven//:com_google_dagger_dagger",
             "@maven//:com_google_dagger_dagger_producers",
             "@maven//:com_google_guava_guava",
@@ -94,15 +97,24 @@ java_binary(
             "@maven//:io_reactivex_rxjava2_rxjava",
             "@maven//:io_reactivex_rxjava",
             ],
+    visibility = ["//visibility:public"],
     plugins = [":lombok_plugin", ":dagger_plugin", ":vertx_plugin", ":vertx_proxy_plugin",],
 )
 
+java_binary(
+    name = "binary",
+    main_class = "com.example.starter.Main",
+    runtime_deps = [":compile",],
+)
 
 java_test(
-    name = "AllTests",
-    srcs = glob(['src/test/java/**/*.java']),
-    size = "small",
+    name = "tests",
+    srcs = glob(["*.java",]),
+    args = ["--select-package=com.example"],
+    main_class = "org.junit.platform.console.ConsoleLauncher",
+    use_testrunner = False,
+    visibility = ["//visibility:public"],
     runtime_deps = [
-        ":compile"
+        ":compile",
     ],
 )

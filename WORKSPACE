@@ -27,8 +27,12 @@ maven_install(
         "io.vertx:vertx-codegen:3.8.5",
         "io.vertx:vertx-unit:3.8.5",
         "io.vertx:vertx-config-kubernetes-configmap:3.8.5",
+
         "org.junit.jupiter:junit-jupiter-api:5.4.0",
         "org.junit.jupiter:junit-jupiter-engine:5.4.0",
+        "org.junit.platform:junit-platform-console:1.5.2",
+        "org.mockito:mockito-junit-jupiter:3.3.3",
+
         "com.google.dagger:dagger:2.22.1",
         "com.google.dagger:dagger-compiler:2.22.1",
         "com.google.dagger:dagger-producers:2.22.1",

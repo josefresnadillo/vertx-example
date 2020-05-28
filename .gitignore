@@ -203,7 +203,7 @@ buildNumber.properties
 **/nbproject/private/
 **/nbproject/Makefile-*.mk
 **/nbproject/Package-*.bash
-build/
+BUILD.bazel/
 nbbuild/
 dist/
 nbdist/
@@ -250,3 +250,8 @@ src/main/main.iml
 *.iml
 
 __pycache__/
+
+bazel-testlogs
+bazel-out
+bazel-bin
+bazel-vertx-ddd-template
