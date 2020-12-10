@@ -6,4 +6,4 @@ thirdParties:
   xkcdJoke:
     url: "https://xkcd.com/id/info.0.json"
     retries: 3
-    email: "jose.fresna@masmovil.com"
+    email: "nobody@masmovil.com"
