@@ -10,16 +10,16 @@ import io.vertx.core.Vertx;
 @ProxyGen
 public interface XkcdJokeBbddDao {
 
-  String SERVICE_ADDRESS = "database-service-address";
+    String SERVICE_ADDRESS = "database-service-address";
 
-  // A couple of factory methods to create an instance and a proxy
-  static XkcdJokeBbddDao create(Vertx vertx) {
-    return new XkcdJokeBbddDaoImpl(vertx);
-  }
+    // A couple of factory methods to create an instance and a proxy
+    static XkcdJokeBbddDao create(Vertx vertx) {
+        return new XkcdJokeBbddDaoImpl(vertx);
+    }
 
-  static XkcdJokeBbddDao createProxy(Vertx vertx, String address) {
-    return new XkcdJokeBbddDaoVertxEBProxy(vertx, address);
-  }
+    static XkcdJokeBbddDao createProxy(Vertx vertx, String address) {
+        return new XkcdJokeBbddDaoVertxEBProxy(vertx, address);
+    }
 
-  void save(String joke, Handler<AsyncResult<String>> resultHandler);
+    void save(String joke, Handler<AsyncResult<String>> resultHandler);
 }

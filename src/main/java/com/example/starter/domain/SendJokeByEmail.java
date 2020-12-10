@@ -1,5 +1,5 @@
 package com.example.starter.domain;
 
 public interface SendJokeByEmail {
-  void send(XkcdJoke joke, String to);
+    void send(XkcdJoke joke, String to);
 }

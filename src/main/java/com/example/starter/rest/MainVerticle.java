@@ -12,40 +12,40 @@ import io.vertx.reactivex.ext.web.handler.StaticHandler;
 
 public class MainVerticle extends AbstractVerticle {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(MainVerticle.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainVerticle.class.getName());
 
-  @Override
-  public void start() {
+    @Override
+    public void start() {
 
-    HandlerComponents handlerComponents = DaggerHandlerComponents.create();
+        HandlerComponents handlerComponents = DaggerHandlerComponents.create();
 
-    XkcdRestHandlerImpl handler = handlerComponents.buildXkcdRestHandler();
-    Router router = Router.router(vertx);
-    router.route("/xkcd").handler(handler::getContent);
+        XkcdRestHandlerImpl handler = handlerComponents.buildXkcdRestHandler();
+        Router router = Router.router(vertx);
+        router.route("/xkcd").handler(handler::getContent);
 
-    router.route("/*").handler(StaticHandler.create());
+        router.route("/*").handler(StaticHandler.create());
 
-    router.route("/health").handler(routingContext -> {
-      HttpServerResponse response = routingContext.response();
-      LOGGER.info("Health!!!");
-      response
-              .putHeader("content-type", "text/html")
-              .setStatusCode(200)
-              .end("<h1>Health OK</h1>");
-    });
+        router.route("/health").handler(routingContext -> {
+            HttpServerResponse response = routingContext.response();
+            LOGGER.info("Health!!!");
+            response
+                    .putHeader("content-type", "text/html")
+                    .setStatusCode(200)
+                    .end("<h1>Health OK</h1>");
+        });
 
-    String host = config().getJsonObject("server").getString("host");
-    Integer port = config().getJsonObject("server").getInteger("port");
+        String host = config().getJsonObject("server").getString("host");
+        Integer port = config().getJsonObject("server").getInteger("port");
 
-    LOGGER.info("Host: " + host + " port: " + port);
+        LOGGER.info("Host: " + host + " port: " + port);
 
-    vertx.createHttpServer().requestHandler(router).rxListen(port, host)
-      .doOnError(failure -> {
-        LOGGER.info("Error trying to start server: " + failure.getMessage());
-        System.exit(1);
-      })
-      .subscribe(httpServer -> {
-        LOGGER.info("HTTP server started on http://" + host + ":" + port);
-      }).dispose();
-  }
+        vertx.createHttpServer().requestHandler(router).rxListen(port, host)
+                .doOnError(failure -> {
+                    LOGGER.info("Error trying to start server: " + failure.getMessage());
+                    System.exit(1);
+                })
+                .subscribe(httpServer -> {
+                    LOGGER.info("HTTP server started on http://" + host + ":" + port);
+                }).dispose();
+    }
 }

@@ -7,15 +7,14 @@ import io.vertx.serviceproxy.ServiceBinder;
 
 public class BlockingXkcdSendEmailVerticle extends AbstractVerticle {
 
-	@Override
-	public void start() {
-		// blocking helloWorld example
-		EmailService emailService = new EmailServiceImpl(vertx.getDelegate());
+    @Override
+    public void start() {
+        // blocking helloWorld example
+        EmailService emailService = new EmailServiceImpl(vertx.getDelegate());
 
-		// Register the handler
-		new ServiceBinder(vertx.getDelegate())
-			.setAddress(EmailService.SERVICE_ADDRESS)
-			.registerLocal(EmailService.class, emailService);
-	}
-
+        // Register the handler
+        new ServiceBinder(vertx.getDelegate())
+                .setAddress(EmailService.SERVICE_ADDRESS)
+                .registerLocal(EmailService.class, emailService);
+    }
 }

@@ -6,9 +6,9 @@ import io.reactivex.Single;
 
 public class XkcdRestServiceImpl implements XkcdRestService {
 
-    private GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase;
+    private final GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase;
 
-    public XkcdRestServiceImpl(GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase){
+    public XkcdRestServiceImpl(GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase) {
         this.generateRandomXkcdJokeUseCase = generateRandomXkcdJokeUseCase;
     }
 
