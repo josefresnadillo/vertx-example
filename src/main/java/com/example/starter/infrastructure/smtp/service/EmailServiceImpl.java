@@ -31,7 +31,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void send(String joke, String to, Handler<AsyncResult<String>> resultHandler) {
         //TODO
-        XkcdJoke xkcdJoke = toJoke(joke);
+        final XkcdJoke xkcdJoke = toJoke(joke);
         LOGGER.info("Send joke: " + xkcdJoke.getId() + ": Thread: " + Thread.currentThread().getId());
         resultHandler.handle(Future.succeededFuture(xkcdJoke.getId()));
     }

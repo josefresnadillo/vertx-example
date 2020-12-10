@@ -18,16 +18,17 @@ public class XkcdJokeBbddDaoImpl implements XkcdJokeBbddDao {
     }
 
     @Inject
-    public XkcdJokeBbddDaoImpl(Vertx vertx) {
+    public XkcdJokeBbddDaoImpl(final Vertx vertx) {
     }
 
-    public void save(String joke, Handler<AsyncResult<String>> resultHandler) {
+    public void save(final String joke,
+                     final Handler<AsyncResult<String>> resultHandler) {
         // TODO
         LOGGER.info("Saving joke: " + safeSubString(joke) + ": Thread: " + Thread.currentThread().getId());
         resultHandler.handle(Future.succeededFuture("ok"));
     }
 
-    private String safeSubString(String joke) {
+    private String safeSubString(final String joke) {
         String result = joke;
         result = result.replace("\\n", " ");
         if (joke.length() > MAXJOKELOG) {

@@ -15,16 +15,17 @@ public class XkcdJokeRepositoryImpl implements XkcdJokeRepository {
     private final XkcdJokeBbddDao bbddDao;
     private final XkcdJokeRemoteDao remoteDao;
 
-    public XkcdJokeRepositoryImpl(XkcdJokeBbddDao dao, XkcdJokeRemoteDao remoteDao) {
+    public XkcdJokeRepositoryImpl(final XkcdJokeBbddDao dao,
+                                  final XkcdJokeRemoteDao remoteDao) {
         this.bbddDao = dao;
         this.remoteDao = remoteDao;
     }
 
-    public Single<XkcdJoke> retrieve(String id) {
+    public Single<XkcdJoke> retrieve(final String id) {
         return remoteDao.retrieve(id);
     }
 
-    public void save(XkcdJoke joke) {
+    public void save(final XkcdJoke joke) {
         LOGGER.info("Save Joke: " + joke.getId());
         bbddDao.save(joke.getTranscript(),
                 res2 -> {
@@ -35,5 +36,4 @@ public class XkcdJokeRepositoryImpl implements XkcdJokeRepository {
                     }
                 });
     }
-
 }

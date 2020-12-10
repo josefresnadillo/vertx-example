@@ -8,12 +8,12 @@ public class XkcdRestServiceImpl implements XkcdRestService {
 
     private final GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase;
 
-    public XkcdRestServiceImpl(GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase) {
+    public XkcdRestServiceImpl(final GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase) {
         this.generateRandomXkcdJokeUseCase = generateRandomXkcdJokeUseCase;
     }
 
     @Override
-    public Single<XkcdJoke> fetchRandomJoke(String email) {
+    public Single<XkcdJoke> fetchRandomJoke(final String email) {
         return generateRandomXkcdJokeUseCase.fetchRandomJoke(email);
     }
 }

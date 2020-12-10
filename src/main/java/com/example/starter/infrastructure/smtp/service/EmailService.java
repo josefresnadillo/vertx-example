@@ -11,13 +11,16 @@ public interface EmailService {
     String SERVICE_ADDRESS = "email-service-address";
 
     // A couple of factory methods to create an instance and a proxy
-    static EmailService create(Vertx vertx) {
+    static EmailService create(final Vertx vertx) {
         return new EmailServiceImpl(vertx);
     }
 
-    static EmailService createProxy(Vertx vertx, String address) {
+    static EmailService createProxy(final Vertx vertx,
+                                    final String address) {
         return new EmailServiceVertxEBProxy(vertx, address);
     }
 
-    void send(String joke, String to, Handler<AsyncResult<String>> resultHandler);
+    void send(final String joke,
+              final String to,
+              final Handler<AsyncResult<String>> resultHandler);
 }

@@ -13,13 +13,15 @@ public interface XkcdJokeBbddDao {
     String SERVICE_ADDRESS = "database-service-address";
 
     // A couple of factory methods to create an instance and a proxy
-    static XkcdJokeBbddDao create(Vertx vertx) {
+    static XkcdJokeBbddDao create(final Vertx vertx) {
         return new XkcdJokeBbddDaoImpl(vertx);
     }
 
-    static XkcdJokeBbddDao createProxy(Vertx vertx, String address) {
+    static XkcdJokeBbddDao createProxy(final Vertx vertx,
+                                       final String address) {
         return new XkcdJokeBbddDaoVertxEBProxy(vertx, address);
     }
 
-    void save(String joke, Handler<AsyncResult<String>> resultHandler);
+    void save(final String joke,
+              final Handler<AsyncResult<String>> resultHandler);
 }

@@ -19,9 +19,9 @@ public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-        Vertx vertx = Vertx.vertx();
+        final Vertx vertx = Vertx.vertx();
 
-        ConfigStoreOptions store = new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", "vxcnf/config.yaml"));
+        final ConfigStoreOptions store = new ConfigStoreOptions().setType("file").setFormat("yaml").setConfig(new JsonObject().put("path", "vxcnf/config.yaml"));
 
         final String vertxConfigPath = System.getenv("VERTX_CONFIG_PATH");
         if (vertxConfigPath != null) {
@@ -30,15 +30,15 @@ public class Main {
         }
 
         LOGGER.info("Reading configuration...");
-        ConfigRetriever retriever = ConfigRetriever.create(vertx, new ConfigRetrieverOptions().addStore(store));
+        final ConfigRetriever retriever = ConfigRetriever.create(vertx, new ConfigRetrieverOptions().addStore(store));
         retriever.getConfig(ar -> {
 
             LOGGER.info("Reading configuration... done!");
 
-            DeploymentOptions deploymentOptions = new DeploymentOptions().setConfig(ar.result()).setInstances(3);
+            final DeploymentOptions deploymentOptions = new DeploymentOptions().setConfig(ar.result()).setInstances(3);
             vertx.deployVerticle(MainVerticle.class.getName(), deploymentOptions);
 
-            DeploymentOptions workerDeploymentOptions = new DeploymentOptions().setWorker(true)
+            final DeploymentOptions workerDeploymentOptions = new DeploymentOptions().setWorker(true)
                     .setInstances(3) // matches the worker pool size below
                     .setWorkerPoolName("helloWorld-worker-pool")
                     .setWorkerPoolSize(3)
@@ -47,7 +47,6 @@ public class Main {
 
             vertx.deployVerticle(BlockingXkcdBbddVerticle.class.getName(), workerDeploymentOptions);
             vertx.deployVerticle(BlockingXkcdSendEmailVerticle.class.getName(), workerDeploymentOptions);
-
         });
     }
 }

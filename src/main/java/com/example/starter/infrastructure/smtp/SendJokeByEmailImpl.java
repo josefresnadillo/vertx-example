@@ -15,13 +15,14 @@ public class SendJokeByEmailImpl implements SendJokeByEmail {
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
 
-    public SendJokeByEmailImpl(EmailService emailService) {
+    public SendJokeByEmailImpl(final EmailService emailService) {
         this.emailService = emailService;
         this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public void send(XkcdJoke joke, String to) {
+    public void send(final XkcdJoke joke,
+                     final String to) {
         LOGGER.info("Send joke by email: " + joke.getId());
         emailService.send(toJson(joke), to,
                 res -> {
@@ -33,7 +34,7 @@ public class SendJokeByEmailImpl implements SendJokeByEmail {
                 });
     }
 
-    private String toJson(XkcdJoke xkcdJoke) {
+    private String toJson(final XkcdJoke xkcdJoke) {
         try {
             return objectMapper.writeValueAsString(xkcdJoke);
         } catch (Exception e) {

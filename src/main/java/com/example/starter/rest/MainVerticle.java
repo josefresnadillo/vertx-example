@@ -17,10 +17,10 @@ public class MainVerticle extends AbstractVerticle {
     @Override
     public void start() {
 
-        HandlerComponents handlerComponents = DaggerHandlerComponents.create();
+        final HandlerComponents handlerComponents = DaggerHandlerComponents.create();
 
-        XkcdRestHandlerImpl handler = handlerComponents.buildXkcdRestHandler();
-        Router router = Router.router(vertx);
+        final XkcdRestHandlerImpl handler = handlerComponents.buildXkcdRestHandler();
+        final Router router = Router.router(vertx);
         router.route("/xkcd").handler(handler::getContent);
 
         router.route("/*").handler(StaticHandler.create());
@@ -28,14 +28,13 @@ public class MainVerticle extends AbstractVerticle {
         router.route("/health").handler(routingContext -> {
             HttpServerResponse response = routingContext.response();
             LOGGER.info("Health!!!");
-            response
-                    .putHeader("content-type", "text/html")
+            response.putHeader("content-type", "text/html")
                     .setStatusCode(200)
                     .end("<h1>Health OK</h1>");
         });
 
-        String host = config().getJsonObject("server").getString("host");
-        Integer port = config().getJsonObject("server").getInteger("port");
+        final String host = config().getJsonObject("server").getString("host");
+        final Integer port = config().getJsonObject("server").getInteger("port");
 
         LOGGER.info("Host: " + host + " port: " + port);
 

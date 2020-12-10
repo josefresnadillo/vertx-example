@@ -10,7 +10,7 @@ public class BlockingXkcdSendEmailVerticle extends AbstractVerticle {
     @Override
     public void start() {
         // blocking helloWorld example
-        EmailService emailService = new EmailServiceImpl(vertx.getDelegate());
+        final EmailService emailService = new EmailServiceImpl(vertx.getDelegate());
 
         // Register the handler
         new ServiceBinder(vertx.getDelegate())

@@ -26,7 +26,7 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    public XkcdRestService restService(GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase) {
+    public XkcdRestService restService(final GenerateRandomXkcdJokeUseCase generateRandomXkcdJokeUseCase) {
         return new XkcdRestServiceImpl(generateRandomXkcdJokeUseCase);
     }
 
@@ -34,7 +34,8 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    public GenerateRandomXkcdJokeUseCase fetchJoke(XkcdJokeRepository repository, SendJokeByEmail sendJokeByEmail) {
+    public GenerateRandomXkcdJokeUseCase fetchJoke(final XkcdJokeRepository repository,
+                                                   final SendJokeByEmail sendJokeByEmail) {
         return new GenerateRandomXkcdJokeUseCase(repository, sendJokeByEmail);
     }
 
@@ -43,13 +44,14 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    public SendJokeByEmail sendJokeByEmail(EmailService emailService) {
+    public SendJokeByEmail sendJokeByEmail(final EmailService emailService) {
         return new SendJokeByEmailImpl(emailService);
     }
 
     @Provides
     @Singleton
-    public XkcdJokeRepository retrieveJoke(XkcdJokeBbddDao xkcdBBDDDao, XkcdJokeRemoteDao xkcdRemoteDao) {
+    public XkcdJokeRepository retrieveJoke(final XkcdJokeBbddDao xkcdBBDDDao,
+                                           final XkcdJokeRemoteDao xkcdRemoteDao) {
         return new XkcdJokeRepositoryImpl(xkcdBBDDDao, xkcdRemoteDao);
     }
 
@@ -58,8 +60,14 @@ public class ServiceModule {
     @Provides
     @Singleton
     public XkcdJokeRemoteDao xkcdJokeRemoteDao() {
-        String url = Vertx.currentContext().config().getJsonObject("thirdParties").getJsonObject("xkcdJoke").getString("url");
-        Integer retries = Vertx.currentContext().config().getJsonObject("thirdParties").getJsonObject("xkcdJoke").getInteger("retries");
+        final String url = Vertx.currentContext().config()
+                .getJsonObject("thirdParties")
+                .getJsonObject("xkcdJoke")
+                .getString("url");
+        final Integer retries = Vertx.currentContext().config()
+                .getJsonObject("thirdParties")
+                .getJsonObject("xkcdJoke")
+                .getInteger("retries");
         return new XkcdJokeRemoteDaoImpl(WebClient.create(Vertx.currentContext().owner()), url, retries);
     }
 
@@ -67,7 +75,8 @@ public class ServiceModule {
     @Provides
     @Singleton
     public XkcdJokeBbddDao xkcdJokeBbddDao() {
-        ServiceProxyBuilder builder = new ServiceProxyBuilder(Vertx.currentContext().owner().getDelegate()).setAddress(XkcdJokeBbddDao.SERVICE_ADDRESS);
+        ServiceProxyBuilder builder = new ServiceProxyBuilder(Vertx.currentContext().owner().getDelegate())
+                .setAddress(XkcdJokeBbddDao.SERVICE_ADDRESS);
         return builder.build(XkcdJokeBbddDao.class);
     }
 
@@ -77,7 +86,8 @@ public class ServiceModule {
     @Provides
     @Singleton
     public EmailService emailService() {
-        ServiceProxyBuilder builder = new ServiceProxyBuilder(Vertx.currentContext().owner().getDelegate()).setAddress(EmailService.SERVICE_ADDRESS);
+        final ServiceProxyBuilder builder = new ServiceProxyBuilder(Vertx.currentContext().owner().getDelegate())
+                .setAddress(EmailService.SERVICE_ADDRESS);
         return builder.build(EmailService.class);
     }
 }

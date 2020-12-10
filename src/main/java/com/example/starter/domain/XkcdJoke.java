@@ -38,7 +38,7 @@ public class XkcdJoke {
     @Setter
     private String url;
 
-    public XkcdJoke(String id) {
+    public XkcdJoke(final String id) {
         super();
         this.id = id;
     }

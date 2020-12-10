@@ -10,7 +10,7 @@ public class BlockingXkcdBbddVerticle extends AbstractVerticle {
     @Override
     public void start() {
         // blocking helloWorld example
-        XkcdJokeBbddDao xkcdJokeBbddDao = new XkcdJokeBbddDaoImpl(vertx.getDelegate());
+        final XkcdJokeBbddDao xkcdJokeBbddDao = new XkcdJokeBbddDaoImpl(vertx.getDelegate());
 
         // Register the handler
         new ServiceBinder(vertx.getDelegate())

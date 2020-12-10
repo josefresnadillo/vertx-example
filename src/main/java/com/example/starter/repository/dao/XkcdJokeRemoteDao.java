@@ -4,5 +4,5 @@ import com.example.starter.domain.XkcdJoke;
 import io.reactivex.Single;
 
 public interface XkcdJokeRemoteDao {
-    Single<XkcdJoke> retrieve(String id);
+    Single<XkcdJoke> retrieve(final String id);
 }

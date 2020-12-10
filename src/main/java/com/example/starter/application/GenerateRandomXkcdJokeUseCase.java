@@ -20,8 +20,8 @@ public class GenerateRandomXkcdJokeUseCase {
     }
 
     public Single<XkcdJoke> fetchRandomJoke(String email) {
-        int jokeId = rand.nextInt(1000);
-        Single<com.example.starter.domain.XkcdJoke> joke = xkcdJokeRepository.retrieve(String.valueOf(jokeId));
+        final int jokeId = rand.nextInt(1000);
+        final Single<com.example.starter.domain.XkcdJoke> joke = xkcdJokeRepository.retrieve(String.valueOf(jokeId));
         joke.subscribe(xkcdJokeRepository::save).dispose();
         joke.subscribe(j -> sendJokeByEmail.send(j, email)).dispose();
         return joke.map(this::adapt);
@@ -30,7 +30,7 @@ public class GenerateRandomXkcdJokeUseCase {
     // Not using toMap because the Date attribute from the api XkcdJoke is not
     // the same type as the domain XkcdJoke Date attribute (String vs LocalDateTime)
     private XkcdJoke adapt(com.example.starter.domain.XkcdJoke domain) {
-        XkcdJoke api = new XkcdJoke();
+        final XkcdJoke api = new XkcdJoke();
         api.setId(domain.getId());
         api.setAlt(domain.getAlt());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

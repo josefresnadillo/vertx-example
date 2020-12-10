@@ -15,11 +15,11 @@ public class XkcdRestHandlerImpl {
     private static final Logger LOGGER = LoggerFactory.getLogger(XkcdRestHandlerImpl.class.getName());
 
     @Inject
-    public XkcdRestHandlerImpl(XkcdRestService service) {
+    public XkcdRestHandlerImpl(final XkcdRestService service) {
         this.service = service;
     }
 
-    public void getContent(RoutingContext context) {
+    public void getContent(final RoutingContext context) {
         LOGGER.info("Thread: " + Thread.currentThread().getId());
         service.fetchRandomJoke("").subscribe(response -> {
             LOGGER.info("XkcdRestHandlerImpl OK");

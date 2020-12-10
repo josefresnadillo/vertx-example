@@ -47,5 +47,5 @@ public interface XkcdRestService {
                                     schema = @Schema(implementation = Error.class))
                     )
             })
-    Single<XkcdJoke> fetchRandomJoke(String email);
+    Single<XkcdJoke> fetchRandomJoke(final String email);
 }
